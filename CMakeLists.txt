@@ -46,6 +46,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/sbus.c
     Core/Src/shomona.c
+    Core/Src/omni.c
 )
 
 # Add include paths

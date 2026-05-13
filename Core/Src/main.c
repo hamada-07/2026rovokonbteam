@@ -25,6 +25,7 @@
 #include <string.h>
 #include <math.h>
 #include "sbus.h"
+#include "omni.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
