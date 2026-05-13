@@ -26,4 +26,8 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart);
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 
+// static void decode(uint8_t *buf);
+
+
+
 #endif

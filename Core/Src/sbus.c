@@ -121,3 +121,54 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         HAL_UART_Receive_IT(u, rx, 25);
     }
 }
+
+// static void decode(uint8_t *buf)
+// {
+//     int sp = 0;
+//     bool b[192];
+//     uint8_t d[25];
+//     int chd[SBUS_CH];
+
+//     for (int i = 0; i < 24; i++) {
+//     	if(buf[0] != 0x0F) return;
+//             sp = i;
+//             break;
+//     }
+
+//     for (int i = 0; i < 25; i++) {
+//         d[i] = buf[(i + sp) % 25];
+//     }
+
+//     for (int i = 0; i < 24; i++) {
+//         for (int j = 0; j < 8; j++) {
+//             b[i * 8 + j] = d[i + 1] & (1 << j);
+//         }
+//     }
+
+//     for (int i = 0; i < SBUS_CH; i++) {
+//         chd[i] = 0;
+//         for (int j = 0; j < 11; j++) {
+//             chd[i] |= b[i * 11 + j] << j;
+//         }
+//     }
+
+//     for (int i = 0; i < 4; i++) {
+//         val[i] = (float)(chd[i] - 1024) / 656;
+//     }
+
+//     for (int i = 4; i < SBUS_CH; i++) {
+//         switch (type[i]) {
+//         case SBUS_VR:
+//             val[i] = (float)(chd[i] - 144) / (1904 - 144);
+//             break;
+//         case SBUS_SW:
+//             if (chd[i] < 600) val[i] = 0.0f;
+//             else if (chd[i] < 1400) val[i] = 0.5f;
+//             else val[i] = 1.0f;
+//             break;
+//         default:
+//             val[i] = (float)chd[i];
+//             break;
+//         }
+//     }
+// }
