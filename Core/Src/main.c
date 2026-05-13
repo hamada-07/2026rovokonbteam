@@ -22,6 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include "stm32g4xx_hal.h"
+#include "stm32g4xx_hal_fdcan.h"
 #include <string.h>
 #include <math.h>
 #include "sbus.h"
@@ -53,7 +55,11 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+uint8_t RxData[8];
+FDCAN_RxHeaderTypeDef RxHeader;
 
+FDCAN_TxHeaderTypeDef TxHeader;
+uint8_t TxData[8];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -70,9 +76,6 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t TxData[64] = {0};
-uint8_t RxData[64] = {0};
-
 motor mainMotor[4];
 /* USER CODE END 0 */
 
@@ -252,7 +255,16 @@ static void MX_FDCAN2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN FDCAN2_Init 2 */
-
+  FDCAN_FilterTypeDef sFilterConfig;
+  sFilterConfig.IdType = FDCAN_STANDARD_ID;
+  sFilterConfig.FilterIndex = 0;
+  sFilterConfig.FilterType = FDCAN_FILTER_MASK;
+  sFilterConfig.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;
+  sFilterConfig.FilterID1 = 0x000;
+  sFilterConfig.FilterID2 = 0x000;
+  if (HAL_FDCAN_ConfigFilter(&hfdcan2, &sFilterConfig) != HAL_OK) {
+    Error_Handler();
+  }
   /* USER CODE END FDCAN2_Init 2 */
 
 }
@@ -430,10 +442,14 @@ void print(const char* format, int value) {
     HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
 }
 
-void FDCAN_TX(uint32_t recipient){
-  if(0 < HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan2)){
-    FDCAN_TxHeaderTypeDef TxHeader;
-    TxHeader.Identifier =0x200;
+
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,uint32_t RxFifo0ITs){
+    HAL_FDCAN_GetRxMessage(hfdcan,FDCAN_RX_FIFO0,&RxHeader,RxData);
+}
+
+void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
+{
+    TxHeader.Identifier = 0x200;
     TxHeader.IdType = FDCAN_STANDARD_ID;
     TxHeader.TxFrameType = FDCAN_DATA_FRAME;
     TxHeader.DataLength = FDCAN_DLC_BYTES_8;
@@ -442,19 +458,20 @@ void FDCAN_TX(uint32_t recipient){
     TxHeader.FDFormat = FDCAN_CLASSIC_CAN;
     TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
     TxHeader.MessageMarker = 0;
-    for(int i=0;i<8;i++){
-      if(i%2 == 0){
-        TxData[i] = mainMotor[i/2].power >> 8;
-      }else{
-        TxData[i] = mainMotor[(i-1)/2].power & 0xff;
-      }
+
+    TxData[0] = m1 >> 8;
+    TxData[1] = m1 & 0xFF;
+    TxData[2] = m2 >> 8;
+    TxData[3] = m2 & 0xFF;
+    TxData[4] = m3 >> 8;
+    TxData[5] = m3 & 0xFF;
+    TxData[6] = m4 >> 8;
+    TxData[7] = m4 & 0xFF;
+
+    if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
+    {
+        print("\n***********error************\r\n", 0);
     }
-    print("%4d\r",HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData));
-  }
-  else{
-    print("senderror ",0);
-  }
-  HAL_Delay(100);
 }
 
 /* USER CODE END 4 */

@@ -1,9 +1,4 @@
-#include "stdio.h"
 #include "stm32g4xx_hal.h"
-#include "stm32g4xx_hal_fdcan.h"
-#include "string.h"
-#include "stdbool.h"
-#include "sbus.h"
 #include <stdint.h>
 #include <sys/types.h>
 
