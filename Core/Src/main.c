@@ -127,11 +127,11 @@ int main(void)
   {
     sbus_update();
     sbus_stick(&lf,&ls,&rf,&rs);
-    print("lf:%d",lf);
-    print("ls:%d",ls);
-    print("rf:%d",rf);
-    print("rs:%d",rs);
-    print("test:%d",10);
+    lf=sbus_get(5)*8500.0f;
+    print("lf:%d ",(int)(lf));
+    print("ls:%d ",(int)(ls));
+    print("rf:%d ",(int)(rf));
+    print("rs:%d ",(int)(rs));
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
