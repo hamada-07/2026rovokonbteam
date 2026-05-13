@@ -47,6 +47,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/sbus.c
     Core/Src/shomona.c
     Core/Src/omni.c
+    Core/Src/PID.c
 )
 
 # Add include paths
