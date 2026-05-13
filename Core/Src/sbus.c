@@ -99,4 +99,5 @@ void sbus_stick(float* lf,float* ls,float* rf,float* rs){
     *ls = dead(sbus_get(4),-0.1f,0.1f)*8500;
     *rf = dead(sbus_get(2),-0.1f,0.1f)*8500;
     *rs = dead(sbus_get(1),-0.1f,0.1f)*8500;
+    return;
 }

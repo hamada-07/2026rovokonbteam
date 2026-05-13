@@ -127,6 +127,7 @@ int main(void)
     print("ls:%d",ls);
     print("rf:%d",rf);
     print("rs:%d",rs);
+    print("test:%d",10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

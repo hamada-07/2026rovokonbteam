@@ -7,7 +7,7 @@ float dead(float p,float min,float max){
   if((min < p)&&(p < max))p=0;
   return p;
 }
-float abs(float a){
+float absf(float a){
   if(a<0)a *= -1.0f;
   return a;
 }
