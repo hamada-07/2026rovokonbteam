@@ -95,8 +95,8 @@ float sbus_get(uint8_t ch)
 }
 
 void sbus_stick(float* lf,float* ls,float* rf,float* rs){
-    *lf = dead(sbus_get(3),-0.1f,0.1f);
-    *ls = dead(sbus_get(4),-0.1f,0.1f);
-    *rf = dead(sbus_get(2),-0.1f,0.1f);
-    *rs = dead(sbus_get(1),-0.1f,0.1f);
+    *lf = dead(sbus_get(3),-0.1f,0.1f)*8500;
+    *ls = dead(sbus_get(4),-0.1f,0.1f)*8500;
+    *rf = dead(sbus_get(2),-0.1f,0.1f)*8500;
+    *rs = dead(sbus_get(1),-0.1f,0.1f)*8500;
 }

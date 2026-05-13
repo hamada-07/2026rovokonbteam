@@ -72,8 +72,8 @@ static void MX_TIM15_Init(void);
 /* USER CODE BEGIN 0 */
 uint8_t TxData[64] = {0};
 uint8_t RxData[64] = {0};
-
 motor mainMotor[4];
+float lf,ls,rf,rs;
 /* USER CODE END 0 */
 
 /**
@@ -85,6 +85,9 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
+  sbus_init(&huart1);
+  sbus_set(5,SBUS_VR);
+  sbus_set(6,SBUS_SW);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -118,9 +121,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    sbus_update();
+    sbus_stick(&lf,&ls,&rf,&rs);
+    print("lf:%d",lf);
+    print("ls:%d",ls);
+    print("rf:%d",rf);
+    print("rs:%d",rs);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    print("\n",0);
   }
   /* USER CODE END 3 */
 }
