@@ -1,0 +1,39 @@
+#include "PID.h"
+
+
+
+void motor_init(motor *M) {
+    M->encoder = 0;
+    M->speed = 0;
+    M->integral = 0;
+    M->derivative = 0;
+    M->tick = 0;
+    M->target_speed = 0;
+    M->error = 0;
+    M->power = 0;
+}
+void SetTargetSpeed(motor *M, int16_t target_speed) {
+  M->target_speed = target_speed;
+}
+
+void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
+    int16_t last_error = M->error;
+  uint32_t last_tick = M->tick;
+  
+  M->speed = prev_speed;
+  M->error = M->target_speed - M->speed;
+  M->tick = HAL_GetTick();
+  float dt = ((float)(M->tick) / 1000.0f - (float)(last_tick) / 1000.0f);
+  
+  M->integral += ((float)(M->error) + (float)(last_error)) * dt / 2.0f;
+
+  M->derivative = ((float)(M->error) - (float)(last_error)) / dt;
+  
+
+  int16_t P = Kp * M->error;
+  int16_t I = Ki * M->integral;
+  int16_t D = Kd * M->derivative;
+
+  M->power = P + I + D;
+}
+
