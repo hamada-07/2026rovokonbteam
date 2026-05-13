@@ -369,7 +369,11 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void print(const char* format, int value) {
+    char msg[64];
+    sprintf(msg, format, value);
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
+}
 /* USER CODE END 4 */
 
 /**
