@@ -8,6 +8,6 @@ float dead(float p,float min,float max){
   return p;
 }
 float abs(float a){
-  if(a<0)a *= -1;
+  if(a<0)a *= -1.0f;
   return a;
 }
