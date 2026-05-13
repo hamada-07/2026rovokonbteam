@@ -1,1 +1,1 @@
-double Omni(double front,double side,double ang,int id);s
+double Omni(double front,double side,double ang,int id);

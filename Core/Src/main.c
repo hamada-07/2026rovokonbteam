@@ -67,7 +67,10 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint8_t TxData[64] = {0};
+uint8_t RxData[64] = {0};
 
+motor m;
 /* USER CODE END 0 */
 
 /**
@@ -370,11 +373,40 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 void print(const char* format, int value) {
     char msg[64];
     sprintf(msg, format, value);
     HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
 }
+
+void FDCAN_TX(uint32_t recipient){
+  if(0 < HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan2)){
+    FDCAN_TxHeaderTypeDef TxHeader;
+    TxHeader.Identifier =0x200;
+    TxHeader.IdType = FDCAN_STANDARD_ID;
+    TxHeader.TxFrameType = FDCAN_DATA_FRAME;
+    TxHeader.DataLength = FDCAN_DLC_BYTES_8;
+    TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
+    TxHeader.BitRateSwitch = FDCAN_BRS_OFF;
+    TxHeader.FDFormat = FDCAN_CLASSIC_CAN;
+    TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
+    TxHeader.MessageMarker = 0;
+    for(int i=0;i<8;i++){
+      if(i%2 == 0){
+        TxData[i] = m[i/2].power >> 8;
+      }else{
+        TxData[i] = m[(i-1)/2].power & 0xff;
+      }
+    }
+    print("%4d\r",HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData));
+  }
+  else{
+    print("senderror ",0);
+  }
+  HAL_Delay(100);
+}
+
 /* USER CODE END 4 */
 
 /**
