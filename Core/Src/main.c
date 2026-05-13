@@ -28,6 +28,8 @@
 #include <math.h>
 #include "sbus.h"
 #include "omni.h"
+#include <stdint.h>
+#include <sys/types.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,9 +59,9 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 uint8_t RxData[8];
 FDCAN_RxHeaderTypeDef RxHeader;
-
-FDCAN_TxHeaderTypeDef TxHeader;
 uint8_t TxData[8];
+FDCAN_TxHeaderTypeDef TxHeader;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -89,9 +91,8 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
-  sbus_init(&huart1);
-  sbus_set(5,SBUS_VR);
-  sbus_set(6,SBUS_SW);
+  
+  
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -118,7 +119,12 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
+  sbus_init(&huart1);
+  while(sbus_available())
+      sbus_init(&huart1);
 
+  sbus_set(5,SBUS_VR);
+  sbus_set(6,SBUS_SW);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -126,11 +132,15 @@ int main(void)
   while (1)
   {
     sbus_update();
-    sbus_stick(&lf,&ls,&rf,&rs);
-    print("lf:%d",lf);
-    print("ls:%d",ls);
-    print("rf:%d",rf);
-    print("rs:%d",rs);
+    // sbus_stick(&lf,&ls,&rf,&rs);
+      lf = sbus_get(1);
+      ls = sbus_get(2);
+      rf = sbus_get(3);
+      rs = sbus_get(4);
+    print("lf:%d",lf * 100);
+    print("ls:%d",ls * 100);
+    print("rf:%d",rf * 100);
+    print("rs:%d",rs * 100);
     print("test:%d",10);
     /* USER CODE END WHILE */
 
