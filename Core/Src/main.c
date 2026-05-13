@@ -70,7 +70,7 @@ static void MX_USART2_UART_Init(void);
 uint8_t TxData[64] = {0};
 uint8_t RxData[64] = {0};
 
-motor m;
+motor mainMotor[4];
 /* USER CODE END 0 */
 
 /**
@@ -81,7 +81,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  for(int i=0;i<4;i++)motorinit(&mainMotor[i]);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -394,9 +394,9 @@ void FDCAN_TX(uint32_t recipient){
     TxHeader.MessageMarker = 0;
     for(int i=0;i<8;i++){
       if(i%2 == 0){
-        TxData[i] = m[i/2].power >> 8;
+        TxData[i] = mainMotor[i/2].power >> 8;
       }else{
-        TxData[i] = m[(i-1)/2].power & 0xff;
+        TxData[i] = mainMotor[(i-1)/2].power & 0xff;
       }
     }
     print("%4d\r",HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData));

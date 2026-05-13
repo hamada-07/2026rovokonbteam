@@ -34,6 +34,7 @@ extern "C" {
 #include <stdio.h>
 #include "omni.h"
 #include "shomona.h"
+#include "PID.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
