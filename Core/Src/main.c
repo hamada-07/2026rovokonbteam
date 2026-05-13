@@ -81,7 +81,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  for(int i=0;i<4;i++)motorinit(&mainMotor[i]);
+  for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

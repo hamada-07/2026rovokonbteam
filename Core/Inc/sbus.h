@@ -17,6 +17,8 @@ void sbus_set(uint8_t ch, sbus_type_t type);
 void sbus_update(void);
 float sbus_get(uint8_t ch);
 
+void sbus_stick(float* lf,float* ls,float* rf,float* rs);
+
 extern uint8_t rx[25];
 
 #endif

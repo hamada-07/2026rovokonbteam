@@ -1,4 +1,5 @@
 #include "omni.h"
+#include "main.h"
 #include <math.h>
 
 double Omni(double front,double side,double ang,int id){//1から右上、左上、右下、左下
