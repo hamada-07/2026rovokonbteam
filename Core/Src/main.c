@@ -155,8 +155,7 @@ int main(void)
 
     //緊急停止
     if(!sbus_get(9)){
-      print("stop!",0);
-      print("\n",0);
+      print("stop!\n",0);
       stop();
       continue;
     }
