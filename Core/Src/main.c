@@ -151,10 +151,11 @@ int main(void)
 
     //緊急停止
     if(!sbus_get(9)){
-      print("stop",0);
+      print("stop!",0);
+      print("\n",0);
+      stop();
       continue;
     }
-    
     //Can出力
     OmniControl(lf,ls,rs);
     
@@ -528,6 +529,12 @@ void OmniControl(double front,double side,double ang){
   }
   CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
 }
+
+void stop(){
+  lf=0;ls=0;rf=0;rs=0;
+  CAN_SendCurrent(0,0,0,0);
+}
+
 /* USER CODE END 4 */
 
 /**
