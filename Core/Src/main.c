@@ -148,6 +148,10 @@ int main(void)
     ls = dead(sbus_get(4), -0.1f, 0.1f);
     rf = dead(sbus_get(2), -0.1f, 0.1f);
     rs = dead(sbus_get(1), -0.1f, 0.1f);
+    for(int i = 0; i < 4; i++) {
+      mainMotor[i].speed = (int16_t)(RxData[i*2 + 2] << 8 | RxData[i*2 + 3]);
+      // if(mainMotor[i].speed > 32767) mainMotor[i].speed -= 65536;
+    }
 
     //緊急停止
     if(!sbus_get(9)){
@@ -164,7 +168,10 @@ int main(void)
     print("ls:%3d",ls * 100);
     print("rf:%3d",rf * 100);
     print("rs:%3d",rs * 100);
-    print("speed:%3d",mainMotor[0].encoder);
+    print("prev_speed0:%5d",mainMotor[0].speed);
+    print("prev_speed1:%5d",mainMotor[1].speed);
+    print("prev_speed2:%5d",mainMotor[2].speed);
+    print("prev_speed3:%5d",mainMotor[3].speed);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -494,11 +501,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,uint32_t RxFifo0ITs){
 
 void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
 {
-  if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
-  {
-      print("\n***********FD-CAN error************\r\n", 0);
-      return;
-  }
+  
   TxHeader.Identifier = 0x200;
   TxHeader.IdType = FDCAN_STANDARD_ID;
   TxHeader.TxFrameType = FDCAN_DATA_FRAME;
@@ -517,6 +520,12 @@ void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
   TxData[5] = m3 & 0xFF;
   TxData[6] = m4 >> 8;
   TxData[7] = m4 & 0xFF;
+
+  if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
+  {
+      print("\n***********FD-CAN error************\r\n", 0);
+      return;
+  }
 }
 
 void OmniControl(double front,double side,double ang){
