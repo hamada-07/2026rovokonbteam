@@ -139,16 +139,17 @@ int main(void)
   while (1)
   {
     sbus_update();
-    lf = dead(sbus_get(3), -0.1, 0.1);
-    ls = dead(sbus_get(4), -0.1, 0.1);
-    rf = dead(sbus_get(2), -0.1, 0.1);
-    rs = dead(sbus_get(1), -0.1, 0.1);
+    lf = dead(sbus_get(3), -0.1f, 0.1f);
+    ls = dead(sbus_get(4), -0.1f, 0.1f);
+    rf = dead(sbus_get(2), -0.1f, 0.1f);
+    rs = dead(sbus_get(1), -0.1f, 0.1f);
     OmniControl(lf,ls,rs);
     
     print("lf:%3d",lf * 100);
     print("ls:%3d",ls * 100);
     print("rf:%3d",rf * 100);
     print("rs:%3d",rs * 100);
+    print("speed:%3d",mainMotor[0].encoder);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
