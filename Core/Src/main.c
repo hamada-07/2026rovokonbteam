@@ -502,11 +502,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,uint32_t RxFifo0ITs){
 
 void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
 {
-  if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
-  {
-      print("\n***********FD-CAN error************\r\n", 0);
-      return;
-  }
+  
   TxHeader.Identifier = 0x200;
   TxHeader.IdType = FDCAN_STANDARD_ID;
   TxHeader.TxFrameType = FDCAN_DATA_FRAME;
@@ -525,6 +521,12 @@ void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
   TxData[5] = m3 & 0xFF;
   TxData[6] = m4 >> 8;
   TxData[7] = m4 & 0xFF;
+
+  if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
+  {
+      print("\n***********FD-CAN error************\r\n", 0);
+      return;
+  }
 }
 
 void OmniControl(double front,double side,double ang){
