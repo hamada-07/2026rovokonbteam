@@ -126,11 +126,11 @@ int main(void)
   while(sbus_available())
       sbus_init(&huart1);
 
-  sbus_set( 5,SBUS_VR);//VR
-  sbus_set( 6,SBUS_SW);//A
-  sbus_set( 7,SBUS_SW);//D
-  sbus_set( 8,SBUS_SW);//E
-  sbus_set( 9,SBUS_SW);//F
+  sbus_set(5 ,SBUS_VR);//VR
+  sbus_set(6 ,SBUS_SW);//A
+  sbus_set(7 ,SBUS_SW);//D
+  sbus_set(8 ,SBUS_SW);//E
+  sbus_set(9 ,SBUS_SW);//F
   sbus_set(10,SBUS_SW);//G
 
   HAL_FDCAN_Start(&hfdcan2);
@@ -156,6 +156,7 @@ int main(void)
       stop();
       continue;
     }
+
     //Can出力
     OmniControl(lf,ls,rs);
     
