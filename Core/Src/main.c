@@ -139,15 +139,18 @@ int main(void)
   while (1)
   {
     sbus_update();
-    lf = sbus_get(1);
-    ls = sbus_get(2);
-    rf = sbus_get(3);
-    rs = sbus_get(4);
-    CAN_SendCurrent(400, 0, 0, 0);
-    print("lf:%d",lf * 100);
-    print("ls:%d",ls * 100);
-    print("rf:%d",rf * 100);
-    print("rs:%d",rs * 100);
+    // sbus_stick(&lf,&ls,&rf,&rs);
+    lf = sbus_get(3);
+    // ls = sbus_get(2);
+    // rf = sbus_get(3);
+    // rs = sbus_get(4);
+    dead(lf, -0.1, 0.1);
+    SetTargetSpeed(&mainMotor[0], lf * 400);
+    CAN_SendCurrent(lf * 400, 0, 0, 0);
+    print("lf:%d",lf * 400);
+    // print("ls:%d",ls * 100);
+    // print("rf:%d",rf * 100);
+    // print("rs:%d",rs * 100);
     print("test:%d",10);
     print("RX:%d",(RxData[2] << 8) | RxData[3]);
     /* USER CODE END WHILE */
