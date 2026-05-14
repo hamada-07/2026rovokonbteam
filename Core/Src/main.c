@@ -78,8 +78,11 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+#define sbuskei 8500
+
 motor mainMotor[4];
 float lf,ls,rf,rs;
+const float kp=0.8f,ki=0.1f,kd=0.03f;
 /* USER CODE END 0 */
 
 /**
@@ -479,31 +482,41 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,uint32_t RxFifo0ITs){
 
 void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
 {
-    TxHeader.Identifier = 0x200;
-    TxHeader.IdType = FDCAN_STANDARD_ID;
-    TxHeader.TxFrameType = FDCAN_DATA_FRAME;
-    TxHeader.DataLength = FDCAN_DLC_BYTES_8;
-    TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
-    TxHeader.BitRateSwitch = FDCAN_BRS_OFF;
-    TxHeader.FDFormat = FDCAN_CLASSIC_CAN;
-    TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
-    TxHeader.MessageMarker = 0;
+  if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
+  {
+      print("\n***********FD-CAN error************\r\n", 0);
+      return;
+  }
+  TxHeader.Identifier = 0x200;
+  TxHeader.IdType = FDCAN_STANDARD_ID;
+  TxHeader.TxFrameType = FDCAN_DATA_FRAME;
+  TxHeader.DataLength = FDCAN_DLC_BYTES_8;
+  TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
+  TxHeader.BitRateSwitch = FDCAN_BRS_OFF;
+  TxHeader.FDFormat = FDCAN_CLASSIC_CAN;
+  TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
+  TxHeader.MessageMarker = 0;
 
-    TxData[0] = m1 >> 8;
-    TxData[1] = m1 & 0xFF;
-    TxData[2] = m2 >> 8;
-    TxData[3] = m2 & 0xFF;
-    TxData[4] = m3 >> 8;
-    TxData[5] = m3 & 0xFF;
-    TxData[6] = m4 >> 8;
-    TxData[7] = m4 & 0xFF;
-
-    if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
-    {
-        print("\n***********FD-CAN error************\r\n", 0);
-    }
+  TxData[0] = m1 >> 8;
+  TxData[1] = m1 & 0xFF;
+  TxData[2] = m2 >> 8;
+  TxData[3] = m2 & 0xFF;
+  TxData[4] = m3 >> 8;
+  TxData[5] = m3 & 0xFF;
+  TxData[6] = m4 >> 8;
+  TxData[7] = m4 & 0xFF;
 }
 
+void OmniControl(double front,double side,double ang){
+  front *= sbuskei;
+  side  *= sbuskei;
+  ang   *= sbuskei;
+  for(int i=0;i<4;i++){
+    SetTargetSpeed(&mainMotor[i], (int)(Omni(front,side,ang,i)));
+    PID(&mainMotor[i],mainMotor[i].speed,kp,ki,kd);
+  }
+  CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
+}
 /* USER CODE END 4 */
 
 /**
