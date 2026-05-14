@@ -28,6 +28,12 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   M->integral += ((float)(M->error) + (float)(last_error)) * dt / 2.0f;
 
   M->derivative = ((float)(M->error) - (float)(last_error)) / dt;
+
+  // if((motor[i].read==0) && (abs(motor[i].error) < 1000))motor[i].power=0;
+  // if((motor[i].target==0)){
+  //   motor[i].integ = 0;
+  //   motor[i].power=0;
+  // }
   
 
   int16_t P = limit(Kp * M->error     ,-10000,10000);
