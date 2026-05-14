@@ -78,7 +78,7 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define sbuskei 400
+#define sbuskei 8500
 
 motor mainMotor[4];
 float lf,ls,rf,rs;
@@ -139,20 +139,16 @@ int main(void)
   while (1)
   {
     sbus_update();
-    // sbus_stick(&lf,&ls,&rf,&rs);
-    lf = sbus_get(3);
-    // ls = sbus_get(2);
-    // rf = sbus_get(3);
-    // rs = sbus_get(4);
-    dead(lf, -0.1, 0.1);
-    SetTargetSpeed(&mainMotor[0], lf * 400);
-    CAN_SendCurrent(lf * 400, 0, 0, 0);
-    print("lf:%d",lf * 400);
-    // print("ls:%d",ls * 100);
-    // print("rf:%d",rf * 100);
-    // print("rs:%d",rs * 100);
-    print("test:%d",10);
-    print("RX:%d",(RxData[2] << 8) | RxData[3]);
+    lf = dead(sbus_get(3), -0.1, 0.1);
+    ls = dead(sbus_get(4), -0.1, 0.1);
+    rf = dead(sbus_get(2), -0.1, 0.1);
+    rs = dead(sbus_get(1), -0.1, 0.1);
+    OmniControl(lf,ls,rs);
+    
+    print("lf:%3d",lf * 100);
+    print("ls:%3d",ls * 100);
+    print("rf:%3d",rf * 100);
+    print("rs:%3d",rs * 100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -482,29 +478,29 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,uint32_t RxFifo0ITs){
 
 void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
 {
-    TxHeader.Identifier = 0x200;
-    TxHeader.IdType = FDCAN_STANDARD_ID;
-    TxHeader.TxFrameType = FDCAN_DATA_FRAME;
-    TxHeader.DataLength = FDCAN_DLC_BYTES_8;
-    TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
-    TxHeader.BitRateSwitch = FDCAN_BRS_OFF;
-    TxHeader.FDFormat = FDCAN_CLASSIC_CAN;
-    TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
-    TxHeader.MessageMarker = 0;
+  if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
+  {
+      print("\n***********FD-CAN error************\r\n", 0);
+      return;
+  }
+  TxHeader.Identifier = 0x200;
+  TxHeader.IdType = FDCAN_STANDARD_ID;
+  TxHeader.TxFrameType = FDCAN_DATA_FRAME;
+  TxHeader.DataLength = FDCAN_DLC_BYTES_8;
+  TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
+  TxHeader.BitRateSwitch = FDCAN_BRS_OFF;
+  TxHeader.FDFormat = FDCAN_CLASSIC_CAN;
+  TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
+  TxHeader.MessageMarker = 0;
 
-    TxData[0] = m1 >> 8;
-    TxData[1] = m1 & 0xFF;
-    TxData[2] = m2 >> 8;
-    TxData[3] = m2 & 0xFF;
-    TxData[4] = m3 >> 8;
-    TxData[5] = m3 & 0xFF;
-    TxData[6] = m4 >> 8;
-    TxData[7] = m4 & 0xFF;
-
-    if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
-    {
-        print("\n***********FD-CAN error************\r\n", 0);
-    }
+  TxData[0] = m1 >> 8;
+  TxData[1] = m1 & 0xFF;
+  TxData[2] = m2 >> 8;
+  TxData[3] = m2 & 0xFF;
+  TxData[4] = m3 >> 8;
+  TxData[5] = m3 & 0xFF;
+  TxData[6] = m4 >> 8;
+  TxData[7] = m4 & 0xFF;
 }
 
 void OmniControl(double front,double side,double ang){
