@@ -57,6 +57,7 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 void print(const char* format, int value);
+void OmniControl(double front,double side,double ang);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
