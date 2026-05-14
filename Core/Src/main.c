@@ -148,6 +148,10 @@ int main(void)
     ls = dead(sbus_get(4), -0.1f, 0.1f);
     rf = dead(sbus_get(2), -0.1f, 0.1f);
     rs = dead(sbus_get(1), -0.1f, 0.1f);
+    for(int i = 0; i < 4; i++) {
+      mainMotor[i].speed = (int16_t)(RxData[i*2 + 2] << 8 | RxData[i*2 + 3]);
+      // if(mainMotor[i].speed > 32767) mainMotor[i].speed -= 65536;
+    }
 
     //緊急停止
     if(!sbus_get(9)){
@@ -163,7 +167,10 @@ int main(void)
     print("ls:%3d",ls * 100);
     print("rf:%3d",rf * 100);
     print("rs:%3d",rs * 100);
-    print("speed:%3d",mainMotor[0].encoder);
+    print("prev_speed0:%5d",mainMotor[0].speed);
+    print("prev_speed1:%5d",mainMotor[1].speed);
+    print("prev_speed2:%5d",mainMotor[2].speed);
+    print("prev_speed3:%5d",mainMotor[3].speed);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
