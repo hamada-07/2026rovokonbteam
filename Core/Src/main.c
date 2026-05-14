@@ -125,6 +125,10 @@ int main(void)
 
   sbus_set(5,SBUS_VR);
   sbus_set(6,SBUS_SW);
+
+  HAL_FDCAN_Start(&hfdcan2);
+  HAL_FDCAN_ActivateNotification(&hfdcan2,FDCAN_IT_TX_FIFO_EMPTY,0);
+  HAL_FDCAN_ActivateNotification(&hfdcan2,FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -133,15 +137,17 @@ int main(void)
   {
     sbus_update();
     // sbus_stick(&lf,&ls,&rf,&rs);
-      lf = sbus_get(1);
-      ls = sbus_get(2);
-      rf = sbus_get(3);
-      rs = sbus_get(4);
+    lf = sbus_get(1);
+    ls = sbus_get(2);
+    rf = sbus_get(3);
+    rs = sbus_get(4);
+    CAN_SendCurrent(400, 0, 0, 0);
     print("lf:%d",lf * 100);
     print("ls:%d",ls * 100);
     print("rf:%d",rf * 100);
     print("rs:%d",rs * 100);
     print("test:%d",10);
+    print("RX:%d",(RxData[2] << 8) | RxData[3]);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -492,7 +498,7 @@ void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
 
     if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
     {
-        print("\n***********error************\r\n", 0);
+        print("\n***********FD-CAN error************\r\n", 0);
     }
 }
 

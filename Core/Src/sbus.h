@@ -1,4 +1,5 @@
-#include "sbus.h"
+#ifndef SBUS_H
+#define SBUS_H
 
 #include "stm32g4xx_hal.h"
 #include <stdint.h>
@@ -7,6 +8,12 @@
 
 #define SBUS_CH 10
 
+typedef enum {
+    SBUS_VR,
+    SBUS_SW,
+    SBUS_RAW
+} sbus_type_t;
+
 static UART_HandleTypeDef *u;
 static uint8_t rx[25];
 
@@ -14,6 +21,7 @@ static float val[SBUS_CH];
 static sbus_type_t type[SBUS_CH];
 
 static volatile int sbus_ready = 0;
+
 
 void sbus_init(UART_HandleTypeDef *huart)
 {
@@ -121,3 +129,21 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         HAL_UART_Receive_IT(u, rx, 25);
     }
 }
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
