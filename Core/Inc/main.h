@@ -57,6 +57,7 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 void print(const char* format, int value);
+void OmniControl(double front,double side,double ang);
 void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4);
 /* USER CODE END EFP */
 
