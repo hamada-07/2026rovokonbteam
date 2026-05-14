@@ -141,18 +141,16 @@ int main(void)
     sbus_update();
     // sbus_stick(&lf,&ls,&rf,&rs);
     lf = sbus_get(3);
-    // ls = sbus_get(2);
-    // rf = sbus_get(1);
-    // rs = sbus_get(4);
     dead(lf, -0.1, 0.1);
+
+    int prev_speed = (RxData[2] << 8) | RxData[3];
+    if(prev_speed > 32767) prev_speed -= 65536;
+
     SetTargetSpeed(&mainMotor[0], lf * 400);
     CAN_SendCurrent(lf * 400, 0, 0, 0);
+
     print("lf:%d",lf * 400);
-    // print("ls:%d",ls * 400);
-    // print("rf:%d",rf * 400);
-    // print("rs:%d",rs * 400);
-    print("test:%d",10);
-    print("RX:%d",(RxData[2] << 8) | RxData[3]);
+    print("prev_speed:%d",prev_speed);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
