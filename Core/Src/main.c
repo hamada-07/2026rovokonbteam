@@ -78,7 +78,7 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define sbuskei 8500
+#define sbuskei 3000
 
 motor mainMotor[4];
 float lf,ls,rf,rs;
