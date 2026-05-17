@@ -79,12 +79,12 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define sbuskei 20000
+#define sbuskei 18000
 
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-const float kp=1.0f,ki=0.1f,kd=0.0f;
+const float kp=1.5f,ki=0.1f,kd=0.0f;
 /* USER CODE END 0 */
 
 /**
@@ -172,7 +172,10 @@ int main(void)
     for(int i=0;i<4;i++){
       // print("speed%d",i+1);
       print("%d,",mainMotor[i].speed);
-      print("%d",mainMotor[i].target_speed);
+      print("%d,",mainMotor[i].target_speed);
+      print("%d,", mainMotor[i].error);
+      print("%d,", mainMotor[i].integral);
+      print("%d,", mainMotor[i].derivative);
       // print("error:%5d ",mainMotor[i].error);
 
       if(i==0)break;
