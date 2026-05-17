@@ -79,12 +79,12 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define sbuskei 3000
+#define sbuskei 5000
 
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-const float kp=0.8f,ki=0.1f,kd=0.1f;
+const float kp=0.5f,ki=0.1f,kd=0.1f;
 /* USER CODE END 0 */
 
 /**

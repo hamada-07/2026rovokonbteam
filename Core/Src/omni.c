@@ -8,13 +8,13 @@ double Omni(double front,double side,double ang,int id){//1から右上、左上
   double num;
   switch(id){
     case 0:
-      num = -2*sqrt(front*front + side*side)*sin(atan2(front, side) - M_PI/4)/sqrt(2) + ang;
+      num =  -2*sqrt(front*front + side*side)*sin(atan2(front, side) - M_PI/4)/sqrt(2) + ang;
       break;
     case 1:
       num =  2*sqrt(front*front + side*side)*cos(atan2(front, side) - M_PI/4)/sqrt(2) + ang;
       break;
     case 2:
-      num = -2*sqrt(front*front + side*side)*cos(atan2(front, side) - M_PI/4)/sqrt(2) + ang;
+      num =  -2*sqrt(front*front + side*side)*cos(atan2(front, side) - M_PI/4)/sqrt(2) + ang;
       break;
     case 3:
       num =  2*sqrt(front*front + side*side)*sin(atan2(front, side) - M_PI/4)/sqrt(2) + ang;
