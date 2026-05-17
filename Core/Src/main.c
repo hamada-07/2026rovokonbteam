@@ -171,7 +171,7 @@ int main(void)
     for(int i=0;i<4;i++){
       print("speed%d",i+1);
       print(":%5d ",mainMotor[i].speed);
-      print("power:%5d",mainMotor[i].power);
+      print("target:%5d",mainMotor[i].target_speed);
       print("error:%5d ",mainMotor[i].error);
 
       if(i==0)break;
