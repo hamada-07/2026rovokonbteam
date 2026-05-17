@@ -50,7 +50,7 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
     // print("%5d ",D);
   }
 
-  M->power = limit(P + I + D,-10000,10000);
+  M->power = limit(P + I + D,-1.1*sbusreturn(),1.1*sbusreturn());
   if((M->target_speed == 0)){
     M->power=0;
   }

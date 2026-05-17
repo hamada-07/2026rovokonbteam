@@ -558,6 +558,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
   }
 }
 
+int sbusreturn(){return sbuskei;}
+
 /* USER CODE END 4 */
 
 /**
