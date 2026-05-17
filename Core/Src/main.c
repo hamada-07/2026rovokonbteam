@@ -30,6 +30,7 @@
 #include "omni.h"
 #include <stdint.h>
 #include <sys/types.h>
+#include <stdbool.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -83,6 +84,7 @@ static void MX_TIM15_Init(void);
 motor mainMotor[4];
 float lf,ls,rf,rs;
 const float kp=0.8f,ki=0.1f,kd=0.03f;
+bool Tflag = true;
 /* USER CODE END 0 */
 
 /**
@@ -136,12 +138,15 @@ int main(void)
   HAL_FDCAN_Start(&hfdcan2);
   HAL_FDCAN_ActivateNotification(&hfdcan2,FDCAN_IT_TX_FIFO_EMPTY,0);
   HAL_FDCAN_ActivateNotification(&hfdcan2,FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0);
+  HAL_TIM_Base_Start_IT(&htim15);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    if(!Tflag)continue;
+    Tflag = false;
     //sbus読み取り
     sbus_update();
     lf = dead(sbus_get(3), -0.1f, 0.1f);
@@ -164,10 +169,10 @@ int main(void)
     OmniControl(lf,ls,rs);
     
     //デバッグ出力
-    print("lf:%3d",lf * 100);
-    print("ls:%3d",ls * 100);
-    print("rf:%3d",rf * 100);
-    print("rs:%3d",rs * 100);
+    print("lf:%4d",lf * 100);
+    print("ls:%4d",ls * 100);
+    print("rf:%4d",rf * 100);
+    print("rs:%4d",rs * 100);
     print("prev_speed0:%5d",mainMotor[0].speed);
     print("prev_speed1:%5d",mainMotor[1].speed);
     print("prev_speed2:%5d",mainMotor[2].speed);
@@ -542,6 +547,12 @@ void OmniControl(double front,double side,double ang){
 void stop(){
   lf=0;ls=0;rf=0;rs=0;
   CAN_SendCurrent(0,0,0,0);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+  if(htim == &htim15){
+    Tflag = true;
+  }
 }
 
 /* USER CODE END 4 */
