@@ -542,7 +542,7 @@ void OmniControl(double front,double side,double ang){
   ang   *= sbuskei;
   for(int i=0;i<4;i++){
     SetTargetSpeed(&mainMotor[i], (int)(Omni(front,side,ang,i)));
-    PID(&mainMotor[i],mainMotor[i].speed,kp,ki,kd);
+    PID(&mainMotor[i],-mainMotor[i].speed,kp,ki,kd);
   }
   CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
 }
