@@ -1,6 +1,8 @@
 #include "PID.h"
 #include "shomona.h"
 
+
+
 void motor_init(motor *M) {
     M->encoder = 0;
     M->speed = 0;
@@ -16,7 +18,10 @@ void SetTargetSpeed(motor *M, int16_t target_speed) {
 }
 
 void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
-    int16_t last_error = M->error;
+  static int id = 0;
+  if(++id > 4) id = 1;
+  
+  int16_t last_error = M->error;
   uint32_t last_tick = M->tick;
   
   M->speed = prev_speed;
@@ -38,6 +43,12 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   int16_t P = limit(Kp * M->error     ,-10000,10000);
   int16_t I = limit(Ki * M->integral  ,-10000,10000);
   int16_t D = limit(Kd * M->derivative,-10000,10000);
+  print("P%d:",id);
+  print("%5d ",P);
+  print("I%d:",id);
+  print("%5d ",I);
+  print("D%d:",id);
+  print("%5d ",D);
 
   M->power = limit(P + I + D,-10000,10000);
 }
