@@ -165,15 +165,15 @@ int main(void)
     OmniControl(lf,ls,rs);
     
     //デバッグ出力
-    print("lf:%4d",lf * 100);
-    print("ls:%4d",ls * 100);
-    print("rf:%4d",rf * 100);
-    print("rs:%4d",rs * 100);
+    // print("lf:%4d",lf * 100);
+    // print("ls:%4d",ls * 100);
+    // print("rf:%4d",rf * 100);
+    // print("rs:%4d",rs * 100);
     for(int i=0;i<4;i++){
-      print("speed%d",i+1);
-      print(":%5d ",mainMotor[i].speed);
-      print("target:%5d",mainMotor[i].target_speed);
-      print("error:%5d ",mainMotor[i].error);
+      // print("speed%d",i+1);
+      print("%d,",mainMotor[i].speed);
+      print("%d",mainMotor[i].target_speed);
+      // print("error:%5d ",mainMotor[i].error);
 
       if(i==0)break;
     }
