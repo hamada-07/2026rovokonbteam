@@ -1,3 +1,6 @@
+#ifndef PID_H
+#define PID_H
+
 #include "stm32g4xx_hal.h"
 #include <stdint.h>
 #include <sys/types.h>
@@ -17,3 +20,4 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd);
 void motor_init(motor *M);
 void SetTargetSpeed(motor *M, int16_t target_speed);
 
+#endif

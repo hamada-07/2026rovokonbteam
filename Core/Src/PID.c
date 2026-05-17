@@ -1,5 +1,6 @@
 #include "PID.h"
 #include "shomona.h"
+#include "main.h"
 
 void motor_init(motor *M) {
     M->encoder = 0;
