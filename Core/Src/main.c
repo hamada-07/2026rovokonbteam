@@ -82,7 +82,7 @@ static void MX_TIM15_Init(void);
 
 motor mainMotor[4];
 float lf,ls,rf,rs;
-const float kp=0.8f,ki=0.1f,kd=0.03f;
+const float kp=0.8f,ki=0.1f,kd=0.1f;
 /* USER CODE END 0 */
 
 /**
@@ -168,10 +168,14 @@ int main(void)
     print("ls:%3d",ls * 100);
     print("rf:%3d",rf * 100);
     print("rs:%3d",rs * 100);
-    print("prev_speed0:%5d",mainMotor[0].speed);
-    print("prev_speed1:%5d",mainMotor[1].speed);
-    print("prev_speed2:%5d",mainMotor[2].speed);
-    print("prev_speed3:%5d",mainMotor[3].speed);
+    for(int i=0;i<4;i++){
+      print("speed%d",i+1);
+      print(":%5d ",mainMotor[i].speed);
+      print("power:%5d",mainMotor[i].power);
+      print("error:%5d ",mainMotor[i].error);
+
+      if(i==0)break;
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
