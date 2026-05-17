@@ -79,12 +79,12 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define sbuskei 5000
+#define sbuskei 3000
 
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-const float kp=0.3f,ki=0.1f,kd=0.3f;
+const float kp=0.3f,ki=0.0f,kd=0.0f;
 /* USER CODE END 0 */
 
 /**
@@ -542,7 +542,7 @@ void OmniControl(double front,double side,double ang){
   ang   *= sbuskei;
   for(int i=0;i<4;i++){
     SetTargetSpeed(&mainMotor[i], (int)(Omni(front,side,ang,i)));
-    PID(&mainMotor[i],-mainMotor[i].speed,kp,ki,kd);
+    PID(&mainMotor[i],mainMotor[i].speed,kp,ki,kd);
   }
   CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
 }
