@@ -167,8 +167,6 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     for(int i=0;i<4;i++){
       print("%d,",mainMotor[i].speed);
       print("%d,",mainMotor[i].target_speed);
-
-      break;//デバッグ用
     }
     /* USER CODE END WHILE */
 
