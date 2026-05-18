@@ -79,12 +79,12 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define sbuskei 18000
+#define sbuskei 10000
 
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-const float kp=1.7f,ki=0.3f,kd=0.0f;
+const float kp=1.7f,ki=0.5f,kd=0.0f;
 /* USER CODE END 0 */
 
 /**
@@ -167,6 +167,8 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     for(int i=0;i<4;i++){
       print("%d,",mainMotor[i].speed);
       print("%d,",mainMotor[i].target_speed);
+
+      break;//debug
     }
     /* USER CODE END WHILE */
 
@@ -508,7 +510,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,uint32_t RxFifo0ITs){
         mainMotor[1].speed=(RxData[2] << 8) | RxData[3];
       }else if(RxHeader.Identifier==0x203){
         mainMotor[2].speed=(RxData[2] << 8) | RxData[3];
-      }else{
+      }else if(RxHeader.Identifier==0x204){
         mainMotor[3].speed=(RxData[2] << 8) | RxData[3];
       }
     }
