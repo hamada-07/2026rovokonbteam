@@ -61,6 +61,7 @@ void OmniControl(double front,double side,double ang);
 void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4);
 void stop();
 int sbusreturn();
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,uint32_t RxFifo0ITs);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
