@@ -44,12 +44,9 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   int16_t D = limit(Kd * M->derivative,-1*limitnum,limitnum);
   
   if(id==1){
-    // print("P%d:",id);
-    // print("%5d ",P);
-    // print("I%d:",id);
-    // print("%5d ",I);
-    // print("D%d:",id);
-    // print("%5d ",D);
+    print("%d,",P);
+    print("%d,",I);
+    print("%d,",D);
   }
 
   M->power = limit(P + I + D,-1.1*sbusreturn(),1.1*sbusreturn());

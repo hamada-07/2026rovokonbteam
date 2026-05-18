@@ -95,7 +95,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
+for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
   
   
   /* USER CODE END 1 */
@@ -164,21 +164,11 @@ int main(void)
     //Can出力
     OmniControl(lf,ls,rs);
     
-    //デバッグ出力
-    // print("lf:%4d",lf * 100);
-    // print("ls:%4d",ls * 100);
-    // print("rf:%4d",rf * 100);
-    // print("rs:%4d",rs * 100);
     for(int i=0;i<4;i++){
-      // print("speed%d",i+1);
       print("%d,",mainMotor[i].speed);
       print("%d,",mainMotor[i].target_speed);
-      print("%d,", mainMotor[i].error);
-      print("%d,", mainMotor[i].integral);
-      print("%d,", mainMotor[i].derivative);
-      // print("error:%5d ",mainMotor[i].error);
 
-      if(i==0)break;
+      break;//デバッグ用
     }
     /* USER CODE END WHILE */
 
