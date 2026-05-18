@@ -9,7 +9,7 @@
 typedef struct {
     int16_t encoder;
     int16_t speed;
-    int16_t integral;
+    float integral;
     int16_t derivative;
     int16_t tick;
     int16_t target_speed;
