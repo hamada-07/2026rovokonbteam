@@ -493,7 +493,27 @@ void print(const char* format, int value) {
 }
 
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,uint32_t RxFifo0ITs){
-    HAL_FDCAN_GetRxMessage(hfdcan,FDCAN_RX_FIFO0,&RxHeader,RxData);
+    FDCAN_RxHeaderTypeDef RxHeader;
+
+    if (RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE)
+    {
+      
+      HAL_FDCAN_GetRxMessage(
+          hfdcan,
+          FDCAN_RX_FIFO0,
+          &RxHeader,
+          RxData
+      );
+      if(RxHeader.Identifier==0x201){
+        mainMotor[0].speed=(RxData[2] << 8) | RxData[3];
+      }else if(RxHeader.Identifier==0x202){
+        mainMotor[1].speed=(RxData[2] << 8) | RxData[3];
+      }else if(RxHeader.Identifier==0x203){
+        mainMotor[2].speed=(RxData[2] << 8) | RxData[3];
+      }else{
+        mainMotor[3].speed=(RxData[2] << 8) | RxData[3];
+      }
+    }
 }
 
 void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
@@ -526,10 +546,10 @@ void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
 }
 
 void OmniControl(double front,double side,double ang){
-  for(int i = 0; i < 4; i++) {
-      mainMotor[i].speed = (int16_t)(RxData[i*2 + 2] << 8 | RxData[i*2 + 3]);
-      // if(mainMotor[i].speed > 32767) mainMotor[i].speed -= 65536;
-  }
+  HAL_FDCAN_RxFifo0Callback(&hfdcan2,0x201);
+  HAL_FDCAN_RxFifo0Callback(&hfdcan2,0x202);
+  HAL_FDCAN_RxFifo0Callback(&hfdcan2,0x203);
+  HAL_FDCAN_RxFifo0Callback(&hfdcan2,0x204);
   front *= sbuskei;
   side  *= sbuskei;
   ang   *= sbuskei;
