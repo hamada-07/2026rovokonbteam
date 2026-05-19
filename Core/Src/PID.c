@@ -28,7 +28,8 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   M->speed = prev_speed;
   M->error = M->target_speed - M->speed;
   M->tick = HAL_GetTick();
-  float dt = ((float)(M->tick) / 1000.0f - (float)(last_tick) / 1000.0f);
+  float dt = (M->tick - last_tick) / 1000.0f;
+  if(dt <= 0) dt = 0.001f;
   
   M->integral += ((float)(M->error) + (float)(last_error)) * dt / 2.0f;
 
@@ -46,9 +47,9 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
     print("%d,",D);
   }
 
-  M->power = limit(P + I + D,-1.1*sbusreturn(),1.1*sbusreturn());
+  M->power = limit(P + I + D,-10000,10000);
 
-  if((M->speed==0)&&(absf(M->error) < 2000))M->power=0;
+  // if((M->speed==0)&&(absf(M->error) < 2000))M->power=0;
   if((M->speed==0)&&(absf(M->error) < 2000))M->integral=0;
 
   if((M->target_speed == 0)){
