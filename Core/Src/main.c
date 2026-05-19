@@ -84,7 +84,7 @@ static void MX_TIM15_Init(void);
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-const float kp=1.7f,ki=0.5f,kd=0.0f;
+const float kp=1.7f,ki=1.0f,kd=0.0f;
 /* USER CODE END 0 */
 
 /**
@@ -164,12 +164,9 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     //Can出力
     OmniControl(lf,ls,rs);
     
-    for(int i=0;i<4;i++){
-      print("%d,",mainMotor[i].speed);
-      print("%d,",mainMotor[i].target_speed);
-
-      break;//debug
-    }
+    
+    print("%d,",mainMotor[0].speed);
+    print("%d,",mainMotor[0].target_speed);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
