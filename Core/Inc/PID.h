@@ -11,7 +11,7 @@ typedef struct {
     int16_t speed;
     float integral;
     int16_t derivative;
-    int16_t tick;
+    uint32_t tick;
     int16_t target_speed;
     int16_t error;
     int16_t power;
