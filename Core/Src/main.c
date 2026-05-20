@@ -562,6 +562,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
 
     //sbus読み取り
+    printf("tick:%d\r\n",HAL_GetTick());
     sbus_update();
     lf = dead(sbus_get(3), -0.1f, 0.1f);
     ls = dead(sbus_get(4), -0.1f, 0.1f);
