@@ -3,6 +3,12 @@ int limit(int p,int min,int max){
   if(p<min)p=min;
   return p;
 }
+float limitf(float p,float min,float max){
+  if(p>max)p=max;
+  if(p<min)p=min;
+  return p;
+}
+
 float dead(float p,float min,float max){
   if((min < p)&&(p < max))p=0;
   return p;
