@@ -559,6 +559,8 @@ void stop(){
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
   if(htim == &htim15){
     // Tflag = true;
+
+
     //sbus読み取り
     sbus_update();
     lf = dead(sbus_get(3), -0.1f, 0.1f);
