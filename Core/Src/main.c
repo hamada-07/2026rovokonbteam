@@ -153,7 +153,7 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
   {
     if(!Tflag)continue;
     Tflag = false;
-  printf("tick:%d",HAL_GetTick());
+    printf("tick:%d",HAL_GetTick());
     //sbus読み取り
     sbus_update();
     lf = dead(sbus_get(3), -0.1f, 0.1f);
@@ -161,10 +161,10 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     rf = dead(sbus_get(2), -0.1f, 0.1f);
     rs = dead(sbus_get(1), -0.1f, 0.1f);
 
-    // if(!sbus_get(7)){
-    //   if(sbus_get(6))kp=sbus_get(5)*600.0f;
-    //   // else ki=sbus_get(5)*600.0f;
-    // }
+    if(!sbus_get(7)){
+      if(sbus_get(6))kp=sbus_get(5)*600.0f;
+      // else ki=sbus_get(5)*600.0f;
+    }
 
     //緊急停止
     if(!sbus_get(9)){
@@ -177,14 +177,14 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     OmniControl(lf,ls,rs);
     
     
-    printf("%d,",mainMotor[0].speed);
-    printf("%d,",mainMotor[0].target_speed);
+    // printf("%d,",mainMotor[0].speed);
+    // printf("%d,",mainMotor[0].target_speed);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    printf("%f,",kp);
-    printf("%f",ki);
-    printf("\n");
+    // printf("%f,",kp);
+    // printf("%f",ki);
+    // printf("\n");
   }
   /* USER CODE END 3 */
 }

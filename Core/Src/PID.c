@@ -44,9 +44,9 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   int16_t D = (int)(limit(Kd * M->derivative,-1*limitnum,limitnum));
   
   if(id==1){
-    printf("%d,",P);
-    printf("%d,",I);
-    printf("%d,",D);
+    // printf("%d,",P);
+    // printf("%d,",I);
+    // printf("%d,",D);
 
     // printf("%d,", M -> speed);
 
