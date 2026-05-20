@@ -84,7 +84,7 @@ static void MX_TIM15_Init(void);
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-const float kp=10.0f,ki=300.0f,kd=0.0f;
+float kp=10.0f,ki=300.0f,kd=0.0f;
 /* USER CODE END 0 */
 
 /**
@@ -153,6 +153,11 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     ls = dead(sbus_get(4), -0.1f, 0.1f);
     rf = dead(sbus_get(2), -0.1f, 0.1f);
     rs = dead(sbus_get(1), -0.1f, 0.1f);
+
+    if(!sbus_get(7)){
+      if(sbus_get(6))kp=sbus_get(5)*600.0f;
+      else ki=sbus_get(5)*600.0f;
+    }
 
     //緊急停止
     if(!sbus_get(9)){
