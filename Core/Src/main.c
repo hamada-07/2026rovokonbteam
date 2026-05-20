@@ -175,6 +175,8 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    print("%d",kp);
+    print("%d",ki);
     print("\n",0);
   }
   /* USER CODE END 3 */
