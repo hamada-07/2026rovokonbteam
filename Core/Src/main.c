@@ -86,11 +86,6 @@ float lf,ls,rf,rs;
 bool Tflag = true;
 float kp=10.0f,ki=100.0f,kd=0.0f;
 
-int __io_putchar(int ch) {
-    HAL_UART_Transmit(&huart2, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
-    return ch;
-}
-
 /* USER CODE END 0 */
 
 /**
@@ -496,6 +491,10 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+int __io_putchar(int ch) {
+    HAL_UART_Transmit(&huart2, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
+    return ch;
+}
 
 void print(const char* format, int value) {
     char msg[64];
