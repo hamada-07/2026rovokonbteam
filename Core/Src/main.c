@@ -570,15 +570,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
     //   if(sbus_get(6))kp=sbus_get(5)*600.0f;
     //   else ki=sbus_get(5)*600.0f;
     // }
-
+    OmniControl(lf,ls,rs);
     //緊急停止
-    if(!sbus_get(9)){
-      // print("stop!\n",0);
-      stop();
-    }else {
-      //Can出力
-      OmniControl(lf,ls,rs);
-    }
+    // if(!sbus_get(9)){
+    //   stop();
+    // }else {
+    //   //Can出力
+    //   OmniControl(lf,ls,rs);
+    // }
   }
 }
 
