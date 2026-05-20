@@ -1,4 +1,4 @@
-float limit(float p,float min,float max){
+int limit(int p,int min,int max){
   if(p>max)p=max;
   if(p<min)p=min;
   return p;
