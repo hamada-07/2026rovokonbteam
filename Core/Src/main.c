@@ -148,7 +148,7 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
   {
     if(!Tflag)continue;
     Tflag = false;
-    printf("tick:%d",HAL_GetTick());
+    printf("tick:%d\r\n",HAL_GetTick());
     //sbus読み取り
     sbus_update();
     lf = dead(sbus_get(3), -0.1f, 0.1f);
