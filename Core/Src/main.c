@@ -84,7 +84,7 @@ static void MX_TIM15_Init(void);
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-const float kp=1.7f,ki=1.0f,kd=0.0f;
+const float kp=10.0f,ki=300.0f,kd=0.0f;
 /* USER CODE END 0 */
 
 /**
@@ -335,7 +335,7 @@ static void MX_TIM15_Init(void)
 
   /* USER CODE END TIM15_Init 1 */
   htim15.Instance = TIM15;
-  htim15.Init.Prescaler = 999;
+  htim15.Init.Prescaler = 99;
   htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim15.Init.Period = 1199;
   htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -553,7 +553,7 @@ void OmniControl(double front,double side,double ang){
   for(int i=0;i<4;i++){
     SetTargetSpeed(&mainMotor[i], (int)(Omni(front,side,ang,i)));
     PID(&mainMotor[i],mainMotor[i].speed,kp,ki,kd);
-    mainMotor[i].power = limit(mainMotor[i].power,-10000,10000);
+    mainMotor[i].power = limit(mainMotor[i].power,-16000,16000);
   }
   CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
 }

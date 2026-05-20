@@ -2,7 +2,7 @@
 #include "shomona.h"
 #include "main.h"
 
-#define limitnum 20000
+#define limitnum 14000
 
 void motor_init(motor *M) {
     M->encoder = 0;
@@ -33,7 +33,7 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   
   M->integral += ((float)(M->error) + (float)(last_error)) * dt / 2.0f;
 
-  M->integral = limit(M->integral,-10000,10000);
+  M->integral = limit(M->integral,-14000 / Ki,14000 / Ki);
 
   M->derivative = ((float)(M->error) - (float)(last_error)) / dt;
 
@@ -49,8 +49,8 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
 
   M->power = P + I + D;
 
-  if((M->speed==0)&&(absf(M->error) < 2000))M->power=0;
-  if((M->speed==0)&&(absf(M->error) < 2000))M->integral=0;
+  // if((M->speed==0)&&(absf(M->error) < 2000))M->power=0;
+  // if((M->speed==0)&&(absf(M->error) < 2000))M->integral=0;
 
   if((M->target_speed == 0)){
     M->power=0;
