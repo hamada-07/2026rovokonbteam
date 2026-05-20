@@ -84,7 +84,13 @@ static void MX_TIM15_Init(void);
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-float kp=10.0f,ki=300.0f,kd=0.0f;
+float kp=10.0f,ki=100.0f,kd=0.0f;
+
+int __io_putchar(int ch) {
+    HAL_UART_Transmit(&huart2, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
+    return ch;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -147,6 +153,7 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
   {
     if(!Tflag)continue;
     Tflag = false;
+  printf("tick:%d",HAL_GetTick());
     //sbus読み取り
     sbus_update();
     lf = dead(sbus_get(3), -0.1f, 0.1f);
@@ -154,10 +161,10 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     rf = dead(sbus_get(2), -0.1f, 0.1f);
     rs = dead(sbus_get(1), -0.1f, 0.1f);
 
-    if(!sbus_get(7)){
-      if(sbus_get(6))kp=sbus_get(5)*600.0f;
-      else ki=sbus_get(5)*600.0f;
-    }
+    // if(!sbus_get(7)){
+    //   if(sbus_get(6))kp=sbus_get(5)*600.0f;
+    //   // else ki=sbus_get(5)*600.0f;
+    // }
 
     //緊急停止
     if(!sbus_get(9)){
@@ -170,14 +177,14 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     OmniControl(lf,ls,rs);
     
     
-    print("%d,",mainMotor[0].speed);
-    print("%d,",mainMotor[0].target_speed);
+    printf("%d,",mainMotor[0].speed);
+    printf("%d,",mainMotor[0].target_speed);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    print("%d",kp);
-    print("%d",ki);
-    print("\n",0);
+    printf("%f,",kp);
+    printf("%f",ki);
+    printf("\n");
   }
   /* USER CODE END 3 */
 }
@@ -193,18 +200,17 @@ void SystemClock_Config(void)
 
   /** Configure the main internal regulator output voltage
   */
-  HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1);
+  HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST);
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
-  RCC_OscInitStruct.PLL.PLLN = 15;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV3;
+  RCC_OscInitStruct.PLL.PLLN = 40;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
@@ -219,10 +225,10 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }
@@ -290,13 +296,13 @@ static void MX_FDCAN2_Init(void)
   hfdcan2.Init.ClockDivider = FDCAN_CLOCK_DIV1;
   hfdcan2.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
   hfdcan2.Init.Mode = FDCAN_MODE_NORMAL;
-  hfdcan2.Init.AutoRetransmission = DISABLE;
+  hfdcan2.Init.AutoRetransmission = ENABLE;
   hfdcan2.Init.TransmitPause = DISABLE;
   hfdcan2.Init.ProtocolException = DISABLE;
-  hfdcan2.Init.NominalPrescaler = 3;
-  hfdcan2.Init.NominalSyncJumpWidth = 1;
-  hfdcan2.Init.NominalTimeSeg1 = 7;
-  hfdcan2.Init.NominalTimeSeg2 = 2;
+  hfdcan2.Init.NominalPrescaler = 1;
+  hfdcan2.Init.NominalSyncJumpWidth = 60;
+  hfdcan2.Init.NominalTimeSeg1 = 123;
+  hfdcan2.Init.NominalTimeSeg2 = 36;
   hfdcan2.Init.DataPrescaler = 1;
   hfdcan2.Init.DataSyncJumpWidth = 1;
   hfdcan2.Init.DataTimeSeg1 = 1;
@@ -342,9 +348,9 @@ static void MX_TIM15_Init(void)
 
   /* USER CODE END TIM15_Init 1 */
   htim15.Instance = TIM15;
-  htim15.Init.Prescaler = 99;
+  htim15.Init.Prescaler = 160 -1;
   htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim15.Init.Period = 1199;
+  htim15.Init.Period = 999;
   htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim15.Init.RepetitionCounter = 0;
   htim15.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -434,7 +440,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 10000000;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -479,6 +485,7 @@ static void MX_GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
@@ -562,7 +569,7 @@ void OmniControl(double front,double side,double ang){
     PID(&mainMotor[i],mainMotor[i].speed,kp,ki,kd);
     mainMotor[i].power = limit(mainMotor[i].power,-16000,16000);
   }
-  CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
+  // CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
 }
 
 void stop(){

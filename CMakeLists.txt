@@ -42,6 +42,10 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
 )
 
+target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+  -Wl,--start-group -lc -lm -u _printf_float -Wl,--end-group
+)
+
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/sbus.h

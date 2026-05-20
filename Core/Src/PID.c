@@ -1,6 +1,7 @@
 #include "PID.h"
 #include "shomona.h"
 #include "main.h"
+#include "stdio.h"
 
 #define limitnum 14000
 
@@ -28,23 +29,29 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   M->speed = prev_speed;
   M->error = M->target_speed - M->speed;
   M->tick = HAL_GetTick();
-  float dt = (M->tick - last_tick) / 1000.0f;
-  if(dt <= 0) dt = 0.001f;
+  // float dt = (M->tick - last_tick) / 1000.0f;
+  // if(dt <= 0) dt = 0.001f;
+  float dt = 0.001f;
   
   M->integral += ((float)(M->error) + (float)(last_error)) * dt / 2.0f;
 
-  M->integral = limitf(M->integral,-14000 / Ki,14000 / Ki);
+  M->integral = limitf(M->integral,-14000.0f / Ki,14000.0f / Ki);
 
   M->derivative = ((float)(M->error) - (float)(last_error)) / dt;
 
   int16_t P = (int)(limit(Kp * M->error     ,-1*limitnum,limitnum));
-  int16_t I = (int)(limit(Ki * M->integral  ,-1*limitnum,limitnum));
+  int16_t I = (int)(limit((int16_t)(Ki * M->integral)  ,-1*limitnum,limitnum));
   int16_t D = (int)(limit(Kd * M->derivative,-1*limitnum,limitnum));
   
   if(id==1){
-    print("%d,",P);
-    print("%d,",I);
-    print("%d,",D);
+    printf("%d,",P);
+    printf("%d,",I);
+    printf("%d,",D);
+
+    // printf("%d,", M -> speed);
+
+    // printf("i%d\r\n", limit((int16_t)(Ki * M -> integral), -1*limitnum,limitnum));
+    // printf("i%d\r\n", I);
   }
 
   M->power = P + I + D;
