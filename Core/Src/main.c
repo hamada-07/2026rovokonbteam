@@ -568,7 +568,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
     ls = dead(sbus_get(4), -0.1f, 0.1f);
     rf = dead(sbus_get(2), -0.1f, 0.1f);
     rs = dead(sbus_get(1), -0.1f, 0.1f);
-
+    printf("lf:%f,ls:%f,rf:%f,rs:%f\r\n",lf,ls,rf,rs);
     // if(!sbus_get(7)){
     //   if(sbus_get(6))kp=sbus_get(5)*600.0f;
     //   else ki=sbus_get(5)*600.0f;
