@@ -35,8 +35,6 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   
   M->integral += ((float)(M->error) + (float)(last_error)) * dt / 2.0f;
 
-  M->integral = limitf(M->integral,-1.0f * limitnum / Ki,1.0f * limitnum / Ki);
-
   M->derivative = ((float)(M->error) - (float)(last_error)) / dt;
 
   int16_t P = (int)(limit(Kp * M->error     ,-1*limitnum,limitnum));
