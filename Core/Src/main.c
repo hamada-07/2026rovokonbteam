@@ -148,18 +148,19 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
   {
     if(!Tflag)continue;
     Tflag = false;
-    printf("tick:%d",HAL_GetTick());
+    // printf("tick:%d",HAL_GetTick());
     
     sbus_update();
     lf = dead(sbus_get(3), -0.1f, 0.1f);
     ls = dead(sbus_get(4), -0.1f, 0.1f);
     rf = dead(sbus_get(2), -0.1f, 0.1f);
     rs = dead(sbus_get(1), -0.1f, 0.1f);
-    printf("lf:%f,ls:%f,rf:%f,rs:%f\r", lf, ls, rf, rs);
+    // printf("lf:%f,ls:%f,rf:%f,rs:%f\r", lf, ls, rf, rs);
     OmniControl(lf,ls,rs);
     
-    // printf("%d,",mainMotor[0].speed);
-    // printf("%d,",mainMotor[0].target_speed);
+    printf("%6d,",mainMotor[0].speed);
+    printf("%6d,",mainMotor[0].target_speed);
+    printf("%6d,",mainMotor[0].power);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -554,7 +555,7 @@ void OmniControl(double front,double side,double ang){
     PID(&mainMotor[i],mainMotor[i].speed,kp,ki,kd);
     mainMotor[i].power = limit(mainMotor[i].power,-16000,16000);
   }
-  // CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
+  CAN_SendCurrent(mainMotor[0].power,mainMotor[1].power,mainMotor[2].power,mainMotor[3].power);
 }
 
 void stop(){
