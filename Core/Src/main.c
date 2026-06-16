@@ -148,16 +148,15 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
   {
     if(!Tflag)continue;
     Tflag = false;
-    if(sbus_get(9)){
+    sbus_update();
+    if(!sbus_get(9)){
       stop();
       continue;
     }
-    
-    sbus_update();
-    lf = dead(sbus_get(3), -0.1f, 0.1f);
-    ls = dead(sbus_get(4), -0.1f, 0.1f);
-    rf = dead(sbus_get(2), -0.1f, 0.1f);
-    rs = dead(sbus_get(1), -0.1f, 0.1f);
+    lf = dead(sbus_get(3), -0.1f, 0.1f)*(sbus_get(8)+0.5);
+    ls = dead(sbus_get(4), -0.1f, 0.1f)*(sbus_get(8)+0.5);
+    rf = dead(sbus_get(2), -0.1f, 0.1f)*(sbus_get(8)+0.5);
+    rs = dead(sbus_get(1), -0.1f, 0.1f)*(sbus_get(8)+0.5);
     // printf("lf:%f,ls:%f,rf:%f,rs:%f\r", lf, ls, rf, rs);
     OmniControl(lf,ls,rs);
     
@@ -562,7 +561,6 @@ void OmniControl(double front,double side,double ang){
 }
 
 void stop(){
-  lf=0;ls=0;rf=0;rs=0;
   CAN_SendCurrent(0,0,0,0);
 }
 
