@@ -159,7 +159,6 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     rs = dead(sbus_get(1), -0.1f, 0.1f)*(sbus_get(8)+0.5);
     // printf("lf:%f,ls:%f,rf:%f,rs:%f\r", lf, ls, rf, rs);
     OmniControl(lf,ls,rs);
-    
     printf("%6d,",mainMotor[0].speed);
     printf("%6d,",mainMotor[0].target_speed);
     printf("%6d,",mainMotor[0].power);
@@ -561,7 +560,7 @@ void OmniControl(double front,double side,double ang){
 }
 
 void stop(){
-  CAN_SendCurrent(0,0,0,0);
+  OmniControl(0,0,0);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
