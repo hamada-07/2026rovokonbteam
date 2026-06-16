@@ -53,9 +53,4 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   }
 
   M->power = P + I + D;
-
-  // if((M->speed==0)&&(absf(M->error) < 2000))M->power=0;
-  // if((M->speed==0)&&(absf(M->error) < 2000))M->integral=0;
-
-  
 }
