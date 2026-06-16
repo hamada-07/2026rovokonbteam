@@ -156,6 +156,10 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     rf = dead(sbus_get(2), -0.1f, 0.1f);
     rs = dead(sbus_get(1), -0.1f, 0.1f);
     // printf("lf:%f,ls:%f,rf:%f,rs:%f\r", lf, ls, rf, rs);
+    if(sbus_get(9)){
+      stop();
+      continue;
+    }
     OmniControl(lf,ls,rs);
     
     printf("%6d,",mainMotor[0].speed);
