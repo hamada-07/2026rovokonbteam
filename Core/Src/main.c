@@ -84,7 +84,7 @@ static void MX_TIM15_Init(void);
 motor mainMotor[4];
 float lf,ls,rf,rs;
 bool Tflag = true;
-float kp=20.0f,ki=60.0f,kd=0.0f;
+float kp=20.0f,ki=80.0f,kd=0.0f;
 
 /* USER CODE END 0 */
 
