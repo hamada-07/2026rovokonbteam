@@ -25,5 +25,5 @@ double Omni(double front,double side,double ang,int id){//1から右上、左上
       print("omni error!!!",0);
   }
   
-  return num/(lefthiju*righthiju);
+  return num/(lefthiju+righthiju);
 }
