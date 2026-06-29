@@ -157,7 +157,6 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     ls = dead(sbus_get(4), -0.1f, 0.1f)*(sbus_get(8)+0.5);
     rf = dead(sbus_get(2), -0.1f, 0.1f)*(sbus_get(8)+0.5);
     rs = dead(sbus_get(1), -0.1f, 0.1f)*(sbus_get(8)+0.5);
-    // printf("lf:%f,ls:%f,rf:%f,rs:%f\r", lf, ls, rf, rs);
     OmniControl(lf,ls,rs);
     printf("%6d,",mainMotor[0].speed);
     printf("%6d,",mainMotor[0].target_speed);
@@ -165,8 +164,6 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    // printf("%f,",kp);
-    // printf("%f",ki);
     printf("\n");
   }
   /* USER CODE END 3 */
@@ -538,7 +535,6 @@ void CAN_SendCurrent(int16_t m1, int16_t m2, int16_t m3, int16_t m4)
 
   if(HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData) != HAL_OK)
   {
-      // print("\n***********FD-CAN error************\r\n", 0);
       return;
   }
 }
@@ -566,28 +562,6 @@ void stop(){
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
   if(htim == &htim15){
     Tflag = true;
-
-
-    //sbus読み取り
-    
-    // sbus_update();
-    // lf = dead(sbus_get(3), -0.1f, 0.1f);
-    // ls = dead(sbus_get(4), -0.1f, 0.1f);
-    // rf = dead(sbus_get(2), -0.1f, 0.1f);
-    // rs = dead(sbus_get(1), -0.1f, 0.1f);
-    
-    // if(!sbus_get(7)){
-    //   if(sbus_get(6))kp=sbus_get(5)*600.0f;
-    //   else ki=sbus_get(5)*600.0f;
-    // }
-    // OmniControl(lf,ls,rs);
-    //緊急停止
-    // if(!sbus_get(9)){
-    //   stop();
-    // }else {
-    //   //Can出力
-    //   OmniControl(lf,ls,rs);
-    // }
   }
 }
 

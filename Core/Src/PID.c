@@ -24,7 +24,7 @@ void PID(motor *M, int16_t prev_speed, float Kp, float Ki, float Kd){
   if(++id > 4) id = 1;
   
   int16_t last_error = M->error;
-  uint32_t last_tick = M->tick;
+  // uint32_t last_tick = M->tick;
   
   M->speed = prev_speed;
   M->error = M->target_speed - M->speed;
