@@ -153,11 +153,11 @@ for(int i=0;i<4;i++)motor_init(&mainMotor[i]);
       stop();
       continue;
     }
-    lf = dead(sbus_get(3), -0.1f, 0.1f)*(sbus_get(8)+0.5);
-    ls = dead(sbus_get(4), -0.1f, 0.1f)*(sbus_get(8)+0.5);
-    rf = dead(sbus_get(2), -0.1f, 0.1f)*(sbus_get(8)+0.5);
-    rs = dead(sbus_get(1), -0.1f, 0.1f)*(sbus_get(8)+0.5);
-    OmniControl(lf,ls,rs);
+    lf = dead(sbus_get(3), -0.1f, 0.1f);
+    ls = dead(sbus_get(4), -0.1f, 0.1f);
+    rf = dead(sbus_get(2), -0.1f, 0.1f);
+    rs = dead(sbus_get(1), -0.1f, 0.1f);
+    OmniControl(lf*(sbus_get(8)+0.5),ls*(sbus_get(8)+0.5),rs*(sbus_get(8)+0.5));
     printf("%6d,",mainMotor[0].speed);
     printf("%6d,",mainMotor[0].target_speed);
     printf("%6d,",mainMotor[0].power);
